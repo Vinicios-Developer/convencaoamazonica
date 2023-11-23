@@ -3,13 +3,19 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_ckeditor import CKEditor
+import os
 
 app = Flask(__name__)
 ckeditor = CKEditor(app)
 
+if os.getenv("DATABASE_URL"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///iap_amazonica.db'
+
 app.config['CKEDITOR_PKG_TYPE'] = 'full'
 app.config['SECRET_KEY'] = '60cc737479829f9462369024bee383ce'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///iap_amazonica.db'
 
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
