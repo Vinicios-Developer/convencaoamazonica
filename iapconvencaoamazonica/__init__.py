@@ -8,9 +8,10 @@ import os
 app = Flask(__name__)
 ckeditor = CKEditor(app)
 
-if os.getenv("DATABASE_URL"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-
+if os.getenv('DATABASE_URL'):
+    URL_DB = os.getenv('DATABASE_URL')
+    nova_URL = URL_DB.replace('postgres://', 'postgresql://')
+    app.config['SQLALCHEMY_DATABASE_URI'] = nova_URL
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///iap_amazonica.db'
 
