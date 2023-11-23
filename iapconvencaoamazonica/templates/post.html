@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+  <div class="container mt-3">
+    <div class="row mt-4 p-3">
+        <div class="col col-3" style="text-align: center">
+                <img src="{{ url_for('static', filename='profile_pictures/{}'.format(post.autor.foto_perfil))}}"
+                    class="rounded" width="40">
+                <strong>{{ post.autor.username }}</strong>
+        </div>
+        <div class="col col-9">
+            <h3>{{ post.titulo_original }}
+                <small class="text-muted" style="font-size: 15px"> - Data de Criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}
+                    {% if form %}
+                    - <a style="text-decoration: none" href="#form_editarpost">Editar Post</a> / <a style="text-decoration: none" href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#excluirPost">Excluir Post</a>
+                    {% endif %}
+                </small>
+            </h3>
+            <p>{{ post.corpo |safe }}</p>
+        </div>
+    </div>
+  </div>
+
+{% if form %}
+
+<div class="container">
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="POST" action="" id="form_editarpost" class="border p-4 mt-2">
+                    {{ form.csrf_token }}
+                    <legend>Editar Post</legend>
+                    <fieldset>
+                        <div class="form-group">
+                            {{ form.titulo.label(class="form-control-label") }}
+                            {% if form.titulo.errors %}
+                            {{ form.titulo(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for erro in form.titulo.errors %}
+                                {{ erro }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.titulo(class="form-control") }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            {{ form.corpo.label(class="form-control-label") }}
+                            {% if form.corpo.errors %}
+                            {{ form.corpo(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for erro in form.corpo.errors %}
+                                {{ erro }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.corpo() }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    {{ form.botao_submit(class="botaoEditar") }}
+                </form>
+                {{ ckeditor.load() }}
+                {{ ckeditor.config(name='corpo') }}
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="excluirPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir Post?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>Essa ação não poderá ser desfeita, e o post será removido da página e dos resultados de busca.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <form method="POST" action="{{ url_for('excluir_post', post_id=post.id) }}">
+            <button type="submit" class="botaoExcluir">Excluir</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
