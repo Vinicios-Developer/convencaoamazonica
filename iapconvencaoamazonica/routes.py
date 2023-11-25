@@ -182,8 +182,7 @@ def perfil():
 def criar_post():
     form = FormCriarPost()
     if form.validate_on_submit():
-        post = Post(titulo_normalizado=form.titulo.data.replace(' ', '-').lower(), titulo_original=form.titulo.data,
-                    corpo=form.corpo.data, autor=current_user)
+        post = Post(titulo=form.titulo.data, corpo=form.corpo.data, autor=current_user)
         database.session.add(post)
         database.session.commit()
         flash('Post feito com sucesso', 'alert-success')
@@ -259,3 +258,4 @@ def excluir_post(post_id):
         return redirect(url_for('home'))
     else:
         abort(403)
+        
