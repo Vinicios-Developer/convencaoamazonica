@@ -10,7 +10,7 @@ from PIL import Image
 
 @app.route("/")
 def home():
-    posts = Post.query.order_by(Post.titulo_original.desc())
+    posts = Post.query.order_by(Post.id.desc())
     return render_template('home.html', posts=posts)
 
 
@@ -228,30 +228,23 @@ def transforma_titulo_para_url(titulo):
     return titulo.replace(' ', '-').lower()
 
 
-@app.route('/post/<post_titulo_normalizado>', methods=['GET', 'POST'])
-def exibir_post(post_titulo_normalizado):
-    post_titulo = transforma_titulo_para_url(post_titulo_normalizado)
-    post = Post.query.filter_by(titulo_normalizado=post_titulo).first()
-
-    if not post:
-        abort(404)  # Post não encontrado, retorne uma página 404
-
-    if current_user.is_authenticated and current_user == post.autor:
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+def exibir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.autor:
         form = FormCriarPost()
-
         if request.method == 'GET':
-            form.titulo.data = post.titulo_original
+            form.titulo.data = post.titulo
             form.corpo.data = post.corpo
         elif form.validate_on_submit():
-            post.titulo_original = form.titulo.data
-            post.titulo_normalizado = form.titulo.data.replace(' ', '-').lower()
+            post.titulo = form.titulo.data
             post.corpo = form.corpo.data
             database.session.commit()
-            flash('Post atualizado', 'alert-success')
+            flash('Post Atualizado com Sucesso', 'alert-success')
             return redirect(url_for('home'))
     else:
         form = None
-
     return render_template('post.html', post=post, form=form)
 
 
