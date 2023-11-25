@@ -8,7 +8,7 @@
     {% for post in posts %}
     <div class="row mt-4 p-3">
         <div class="col-md-9" style="text-align: justify">
-            <a style="text-decoration: none" href="{{ url_for('exibir_post', post_titulo=post.titulo_original) }}"><h3>{{ post.titulo_original }}</h3></a>
+            <a style="text-decoration: none" href="{{ url_for('exibir_post', post_id=post.id) }}"><h3>{{ post.titulo }}</h3></a>
             <p>{{ post.corpo |safe }}</p>
         </div>
         <div class="col-md-3">
