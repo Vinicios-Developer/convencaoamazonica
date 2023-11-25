@@ -22,8 +22,7 @@ class Usuario(database.Model, UserMixin):
 
 class Post(database.Model):
     id = database.Column(database.Integer, primary_key=True)
-    titulo_normalizado = database.Column(database.String, nullable=False)
-    titulo_original = database.Column(database.String, nullable=False)
+    titulo = database.Column(database.String, nullable=False)
     corpo = database.Column(database.Text, nullable=False)
     data_criacao = database.Column(database.DateTime, nullable=False, default=datetime.utcnow)
     id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)
