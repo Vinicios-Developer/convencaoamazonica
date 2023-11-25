@@ -10,7 +10,7 @@
                 <strong>{{ post.autor.username }}</strong>
         </div>
         <div class="col col-9">
-            <h3>{{ post.titulo_original }}
+            <h3>{{ post.titulo }}
                 <small class="text-muted" style="font-size: 15px"> - Data de Criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}
                     {% if form %}
                     - <a style="text-decoration: none" href="#form_editarpost">Editar Post</a> / <a style="text-decoration: none" href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#excluirPost">Excluir Post</a>
